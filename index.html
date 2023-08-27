@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Passwortgenerator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Passwortgenerator</h1>
+    <label for="passwordLength">Passwortlänge:</label>
+    <input type="number" id="passwordLength" value="12"><br><br>
+    <label for="useDigits">Zahlen verwenden:</label>
+    <input type="checkbox" id="useDigits" checked><br><br>
+    <label for="useSpecialChars">Sonderzeichen verwenden:</label>
+    <input type="checkbox" id="useSpecialChars" checked><br><br>
+    <label for="onlyDotComma">Nur Punkt und Komma als Sonderzeichen:</label>
+    <input type="checkbox" id="onlyDotComma"><br><br>
+    <button onclick="generatePassword()">Passwort generieren</button><br><br>
+    <div id="generatedPassword"></div>
+
+    <script>
+        function generatePassword() {
+            var length = parseInt(document.getElementById("passwordLength").value);
+            var useDigits = document.getElementById("useDigits").checked;
+            var useSpecialChars = document.getElementById("useSpecialChars").checked;
+            var onlyDotComma = document.getElementById("onlyDotComma").checked;
+
+            var minSpecialChars = 2;
+            var requiredSpecialChars = ".,";
+            if (!onlyDotComma) {
+                requiredSpecialChars = "!@#$%^&*()_-+=<>?";
+            }
+
+            var characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            if (useDigits) {
+                characters += "0123456789";
+            }
+            if (useSpecialChars) {
+                characters += requiredSpecialChars;
+            }
+
+            var password = '';
+            for (var i = 0; i < length - minSpecialChars; i++) {
+                var randomIndex = Math.floor(Math.random() * characters.length);
+                password += characters.charAt(randomIndex);
+            }
+
+            // Füge die erforderlichen Sonderzeichen hinzu
+            for (var i = 0; i < minSpecialChars; i++) {
+                var randomIndex = Math.floor(Math.random() * requiredSpecialChars.length);
+                password += requiredSpecialChars.charAt(randomIndex);
+            }
+
+            // Mische das Passwort zufällig
+            password = password.split('').sort(function(){return 0.5-Math.random()}).join('');
+
+            document.getElementById("generatedPassword").textContent = "Generiertes Passwort: " + password;
+        }
+    </script>
+</body>
+</html>

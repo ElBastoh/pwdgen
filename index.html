@@ -6,15 +6,26 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin-top: 100px;
-        }
-        #passwordContainer {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom right, rgb(9, 122, 138), rgb(0, 58, 66));
+            height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
         }
-        #generatedPassword {
+        #passwordContainer {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        #passwordLabel {
             margin-right: 10px;
+            color: black; /* Schwarze Schriftfarbe für "Generiertes Passwort" */
+        }
+        #generatedPassword {
+            color: white; /* Weiße Schriftfarbe für das generierte Passwort */
         }
         #copyButton {
             display: none;
@@ -23,20 +34,35 @@
             cursor: pointer;
             font-size: 20px;
         }
+        .input-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <h1>Passwortgenerator</h1>
-    <label for="passwordLength">Passwortlänge:</label>
-    <input type="number" id="passwordLength" value="12"><br><br>
-    <label for="useDigits">Zahlen verwenden:</label>
-    <input type="checkbox" id="useDigits" checked><br><br>
-    <label for="useSpecialChars">Sonderzeichen verwenden:</label>
-    <input type="checkbox" id="useSpecialChars" checked><br><br>
-    <label for="onlyDotComma">Nur Punkt und Komma als Sonderzeichen:</label>
-    <input type="checkbox" id="onlyDotComma"><br><br>
+    <div class="input-container">
+        <label for="passwordLength">Passwortlänge:</label>
+        <input type="number" id="passwordLength" value="12">
+    </div>
+    <div class="input-container">
+        <label for="useDigits">Zahlen verwenden:</label>
+        <input type="checkbox" id="useDigits" checked>
+    </div>
+    <div class="input-container">
+        <label for="useSpecialChars">Sonderzeichen verwenden:</label>
+        <input type="checkbox" id="useSpecialChars" checked>
+    </div>
+    <div class="input-container">
+        <label for="onlyDotComma">Nur Punkt und Komma als Sonderzeichen:</label>
+        <input type="checkbox" id="onlyDotComma">
+    </div>
     <button onclick="generatePassword()">Passwort generieren</button><br><br>
     <div id="passwordContainer">
+        <div id="passwordLabel">Generiertes Passwort:</div>
         <div id="generatedPassword"></div>
         <button id="copyButton" onclick="copyToClipboard()" title="Passwort kopieren">&#128203;</button>
     </div>
@@ -75,16 +101,15 @@
 
             password = password.split('').sort(function(){return 0.5-Math.random()}).join('');
 
-            document.getElementById("generatedPassword").textContent = "Generiertes Passwort: " + password;
+            document.getElementById("generatedPassword").textContent = password;
             document.getElementById("copyButton").style.display = "inline-block";
         }
 
         function copyToClipboard() {
             var passwordText = document.getElementById("generatedPassword").textContent;
-            var password = passwordText.split(": ")[1];
             var dummyInput = document.createElement("input");
             document.body.appendChild(dummyInput);
-            dummyInput.setAttribute("value", password);
+            dummyInput.setAttribute("value", passwordText);
             dummyInput.select();
             document.execCommand("copy");
             document.body.removeChild(dummyInput);

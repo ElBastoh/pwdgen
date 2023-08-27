@@ -8,6 +8,21 @@
             text-align: center;
             margin-top: 100px;
         }
+        #passwordContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #generatedPassword {
+            margin-right: 10px;
+        }
+        #copyButton {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+        }
     </style>
 </head>
 <body>
@@ -21,7 +36,10 @@
     <label for="onlyDotComma">Nur Punkt und Komma als Sonderzeichen:</label>
     <input type="checkbox" id="onlyDotComma"><br><br>
     <button onclick="generatePassword()">Passwort generieren</button><br><br>
-    <div id="generatedPassword"></div>
+    <div id="passwordContainer">
+        <div id="generatedPassword"></div>
+        <button id="copyButton" onclick="copyToClipboard()" title="Passwort kopieren">&#128203;</button>
+    </div>
 
     <script>
         function generatePassword() {
@@ -50,16 +68,26 @@
                 password += characters.charAt(randomIndex);
             }
 
-            // Füge die erforderlichen Sonderzeichen hinzu
             for (var i = 0; i < minSpecialChars; i++) {
                 var randomIndex = Math.floor(Math.random() * requiredSpecialChars.length);
                 password += requiredSpecialChars.charAt(randomIndex);
             }
 
-            // Mische das Passwort zufällig
             password = password.split('').sort(function(){return 0.5-Math.random()}).join('');
 
             document.getElementById("generatedPassword").textContent = "Generiertes Passwort: " + password;
+            document.getElementById("copyButton").style.display = "inline-block";
+        }
+
+        function copyToClipboard() {
+            var passwordText = document.getElementById("generatedPassword").textContent;
+            var password = passwordText.split(": ")[1];
+            var dummyInput = document.createElement("input");
+            document.body.appendChild(dummyInput);
+            dummyInput.setAttribute("value", password);
+            dummyInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummyInput);
         }
     </script>
 </body>
